@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+	<meta charset="UTF-8" http-equiv="refresh" content="5">
+
+	<title>Highcharts</title>
+		<!-- jQuery css and js -->
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css" />		
+		<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+		<!--include the highcharts library-->
+		<script src="http://code.highcharts.com/highcharts.js"></script>
+		<!-- Bootstrap css and js -->
+		<link  rel= "stylesheet"  href= "http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css" >
+		<link  rel= "stylesheet"  href= "http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap-theme. min.css" >
+		<script src= "http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js" ></script>
+
+	<script language="javascript">
+	$(function () {
+		var param = location.search.split("?");
+		$.ajax({									  
+			url: 'database_map2.php',				  //the script to call to get data
+			data: param[1],						//you can insert url argumnets here to pass to api.php for example "id=5&parent=6"
+			dataType: 'json',				//data format	  
+			success: function(data)		  //on recieve of reply
+			{	
+				var time = [];
+				var val = [];
+				var val2 = [];
+				for (var i = 0, len = data.length; i < len; i++)
+				//for (var i = 0, i < data.length; i++)
+				{
+					time.push(data[i][4]);
+					val.push(parseInt(data[i][2]));
+					val2.push(parseInt(data[i][3]));//將每筆光敏值放入陣列val中
+				}
+
+		$('#container').highcharts({
+		title: {
+			text: 'Sensor data from MySQL to Highcharts',
+			x: -20 //center
+		},
+		subtitle: {
+			text: 'Sensor Value',
+			x: -20
+		},
+		scrollbar: {
+			eabled:true
+		},
+		chart: {
+			type: 'spline',
+			zoomType: 'x'
+		},
+		xAxis: {
+			tickInterval:1,
+			
+			labels:{
+				enabled: true,
+				formatter: function() {
+					return time[this.value];
+				}
+			}
+		},
+		yAxis: {
+			title: {
+			text: 'value'
+			},
+		},
+		series: [{
+			name: 'temp',
+			data: val
+		}]
+	});
+	  } 
+	});
+
+});
+</script>
+</head>
+
+<body>
+<!-- 導航欄 -->
+	<div class="navbar navbar-inverse navbar-static-top" role="navigation">
+		<!-- 居中效果 -->
+		<div class="container">
+			<!-- 導航欄header -->
+			<div class="navbar-header">
+				<!-- 做切換按鈕-->
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="sr-only"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<!-- bootstrap題目 -->
+				<a class="navbar-brand" href="#"></a>
+			</div>
+			<!-- 區塊元素<ul>，將內容顯示為項目清單，每一項用<li>標記-->
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="#"></a></li>
+					<li><a href="#about"></a></li>
+					<li><a href="#contact"></a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="#"></a></li>
+							<li><a href="#"></a></li>
+						</ul>
+					</li>
+				</ul>
+			</div><!--/.nav-collapse -->
+		</div>
+	</div>
+	<div class="container">
+		<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+	</div>
+	
+	<div class="container">
+		<div class="footer">
+			<p> </p>
+		</div>
+	</div>
+</body>
+</html>

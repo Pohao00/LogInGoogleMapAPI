@@ -1,0 +1,107 @@
+<!DOCTYPE html>1
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+    <style type="text/css">
+      html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
+    </style>
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDq-js62yyjlDo880VnEI8WeNcdmgRO320">
+    </script>2
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css" />
+    
+    <script type="text/javascript">
+
+      var map;
+      var geocoder;
+     $(function (){
+    $.ajax({
+          url: 'database_map.php',
+          data:"",
+          dataType:'json',
+          success: function(data)
+          {
+            getDataSuccess(data);
+            ajax.abort();
+          }
+    });
+     geocoder = new google.maps.Geocoder();
+        var myLatlng = new google.maps.LatLng(24.059399,120.431338);
+        var mapOptions = {
+          center: myLatlng,
+          zoom: 8
+        };4
+         map = new google.maps.Map(
+            document.getElementById('map-canvas'),
+            mapOptions);5
+    });
+
+      function getDataSuccess(data) {    
+        var dataNums = data.length;
+        var ads = [];
+      for (var i = 0; i<dataNums; i++)
+      {
+            if (jQuery.inArray(data[i][3].toString(),ads) == -1)
+            {
+              ads.push(data[i][3].toString());
+              codeAddress(data[i]);
+            }
+      }
+      }
+
+      function codeAddress(data)
+    {
+      var html;
+      geocoder.geocode({'address':data[3].toString()},function(results, status)
+      {
+        //alert(data[3].toString());
+        if (status == google.maps.GeocoderStatus.OK)
+        {
+
+          map.setCenter(results[0].geometry.location);
+          var marker = new google.maps.Marker
+          ({
+            map: map,
+            position: results[0].geometry.location,
+            title: "address"+data[3].toString()+"\nname:"+data[4],
+            animation: google.maps.Animation.DROP
+          });
+
+          marker.addListener('click', function() {
+            html = "";
+            html += data[3];
+            var infowindow = new google.maps.InfoWindow(
+            {
+              content: html
+            });
+            infowindow.open(map,marker);
+          });
+
+          marker.addListener('dblclick', function() {
+           window.open('highchart.html?add='+data[3].toString(), data[3].toString(), config='height=400,width=600');
+          });
+
+        }
+        else
+        {
+          var timeout = 300;
+          if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT)
+          {
+            setTimeout(function() { codeAddress(data); }, timout);
+          }
+          else
+          {
+            alert("Geocode was not successful for the following reason" + status);
+          }
+        }
+      });
+    }
+      /*google.maps.event.addDomListener(
+          window, 'load', getDataSuccess,codeAddress);6*/
+    </script>
+  </head>
+  <body>
+<div id="map-canvas"></div>3
+  </body>
+</html>
