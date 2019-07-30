@@ -1,5 +1,4 @@
 <?php
-
   //user information
   $host = "localhost";
   $user = "test123";
@@ -37,5 +36,5 @@
     $i++;
   }
   //echo result as json 
-    echo json_encode($employee);
+  echo json_encode($employee);
 ?>

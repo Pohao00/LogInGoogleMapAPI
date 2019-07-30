@@ -1,10 +1,9 @@
 ﻿<!DOCTYPE html>
 <html>
 	<body>
-		
 		<?php 
 		
-		include("mysql_connect.inc.php");
+			include("mysql_connect.inc.php");
 			/*$servername="localhost";
 			$username="root";
 			$password="";
@@ -35,7 +34,7 @@
 			{
 				die("<script> window.alert('No user in Database'),location.href=\"index1.html\"; </script>");
 			}
-			?>
+		?>
 	</body>
 </html>
 		

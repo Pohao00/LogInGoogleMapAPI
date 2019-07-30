@@ -2,79 +2,76 @@
 <html lang="zh-tw">
 <head>
 	<meta charset="UTF-8" http-equiv="refresh" content="5">
-
 	<title>Highcharts</title>
-		<!-- jQuery css and js -->
-		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css" />		
-		<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-		<!--include the highcharts library-->
-		<script src="http://code.highcharts.com/highcharts.js"></script>
-		<!-- Bootstrap css and js -->
-		<link  rel= "stylesheet"  href= "http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css" >
-		<link  rel= "stylesheet"  href= "http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap-theme. min.css" >
-		<script src= "http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js" ></script>
+	<!-- jQuery css and js -->
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css" />		
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+	<!--include the highcharts library-->
+	<script src="http://code.highcharts.com/highcharts.js"></script>
+	<!-- Bootstrap css and js -->
+	<link  rel= "stylesheet"  href= "http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css" >
+	<link  rel= "stylesheet"  href= "http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap-theme. min.css" >
+	<script src= "http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js" ></script>
 
 	<script language="javascript">
-	$(function () {
-		var param = location.search.split("?");
-		$.ajax({									  
-			url: 'database_map2.php',				  //the script to call to get data
-			data: param[1],						//you can insert url argumnets here to pass to api.php for example "id=5&parent=6"
-			dataType: 'json',				//data format	  
-			success: function(data)		  //on recieve of reply
-			{	
-				var time = [];
-				var val = [];
-				var val2 = [];
-				for (var i = 0, len = data.length; i < len; i++)
-				//for (var i = 0, i < data.length; i++)
-				{
-					time.push(data[i][4]);
-					val.push(parseInt(data[i][2]));
-					val2.push(parseInt(data[i][3]));//將每筆光敏值放入陣列val中
-				}
+		$(function () {
+			var param = location.search.split("?");
+			$.ajax({									  
+				url: 'database_map2.php',				  //the script to call to get data
+				data: param[1],						//you can insert url argumnets here to pass to api.php for example "id=5&parent=6"
+				dataType: 'json',				//data format	  
+				success: function(data)		  //on recieve of reply
+				{	
+					var time = [];
+					var val = [];
+					var val2 = [];
+					for (var i = 0, len = data.length; i < len; i++)
+					//for (var i = 0, i < data.length; i++)
+					{
+						time.push(data[i][4]);
+						val.push(parseInt(data[i][2]));
+						val2.push(parseInt(data[i][3]));//將每筆光敏值放入陣列val中
+					}
 
-		$('#container').highcharts({
-		title: {
-			text: 'Sensor data from MySQL to Highcharts',
-			x: -20 //center
-		},
-		subtitle: {
-			text: 'Sensor Value',
-			x: -20
-		},
-		scrollbar: {
-			eabled:true
-		},
-		chart: {
-			type: 'spline',
-			zoomType: 'x'
-		},
-		xAxis: {
-			tickInterval:1,
-			
-			labels:{
-				enabled: true,
-				formatter: function() {
-					return time[this.value];
-				}
-			}
-		},
-		yAxis: {
-			title: {
-			text: 'value'
-			},
-		},
-		series: [{
-			name: 'temp',
-			data: val
-		}]
-	});
-	  } 
-	});
-
-});
-</script>
+					$('#container').highcharts({
+						title: {
+						text: 'Sensor data from MySQL to Highcharts',
+						x: -20 //center
+						},
+						subtitle: {
+							text: 'Sensor Value',
+							x: -20
+						},
+						scrollbar: {
+							eabled:true
+						},
+						chart: {
+							type: 'spline',
+							zoomType: 'x'
+						},
+						xAxis: {
+							tickInterval:1,
+							labels:{
+								enabled: true,
+								formatter: function() {
+									return time[this.value];
+								}
+							}
+						},
+						yAxis: {
+							title: {
+								text: 'value'
+							},
+						},
+						series: [{
+							name: 'temp',
+							data: val
+						}]
+					});
+	  			} 
+			});
+		});
+	</script>
 </head>
 
 <body>

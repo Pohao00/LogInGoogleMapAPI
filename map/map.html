@@ -10,79 +10,74 @@
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDq-js62yyjlDo880VnEI8WeNcdmgRO320">
     </script>
-   
-    
   </head>
   <body>
     <div id="map-canvas">
-    <script type="text/javascript">
+      <script type="text/javascript">
+        var map;
+        var geocoder;
+        var dataNum ;
+        function initialize(){
+          $.ajax({
+            url: 'database_map.php',
+            data:"",
+            dataType:'json',
+            success: getDataSuccess
+          });
+        }
 
-      var map;
-      var geocoder;
-      var dataNum ;
-    function initialize(){
-    $.ajax({
-          url: 'database_map.php',
-          data:"",
-          dataType:'json',
-          success: getDataSuccess
-    });
-    }
+        function getDataSuccess(data)
+        {
+          dataNum =  data.length;
+          geocoder = new google.maps.Geocoder();
+            map = new google.maps.Map(document.getElementById('map-canvas'), {
+            center: {lat: 24.1223416, lng: 120.6742634},
+            zoom: 8
+          });
 
-    function getDataSuccess(data)
-    {
-      
-         dataNum =  data.length;
-        geocoder = new google.maps.Geocoder();
-        map = new google.maps.Map(document.getElementById('map-canvas'), {
-    center: {lat: 24.1223416, lng: 120.6742634},
-    zoom: 8
-  });
-
-      var ads = [];
-      for (var i = 0; i<dataNum; i++)
-      {
+          var ads = [];
+          for (var i = 0; i<dataNum; i++)
+          {
             if ($.inArray(data[i][3].toString(),ads) == -1)
             {
               ads.push(data[i][3].toString());
               codeAddress(data[i]);
 
             }
-      }
-    }
-
-    function codeAddress(data)
-    {
-      var html;
-      geocoder.geocode({'address':data[3].toString()},function(results, status)
-      {
-        if (status == google.maps.GeocoderStatus.OK)
-        {
-          map.setCenter(results[0].geometry.location);
-          var marker = new google.maps.Marker
-          ({
-            map: map,
-            position: {lat: 23.5459652, lng: 120.623872},
-            title: "address"+data[3].toString()+"\nname:"+data[4],
-            animation: google.maps.Animation.DROP
-          });
-        }
-        else
-        {
-          var timeout = 300;
-          if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT)
-          {
-            setTimeout(function() { codeAddress(data); }, timout);
           }
+        }
+
+        function codeAddress(data)
+        {
+          var html;
+          geocoder.geocode({'address':data[3].toString()},function(results, status)
+          {
+            if (status == google.maps.GeocoderStatus.OK)
+            {
+              map.setCenter(results[0].geometry.location);
+              var marker = new google.maps.Marker
+              ({
+                map: map,
+                position: {lat: 23.5459652, lng: 120.623872},
+                title: "address"+data[3].toString()+"\nname:"+data[4],
+                animation: google.maps.Animation.DROP
+              });
+            }
           else
           {
-            alert("Geocode was not successful for the following reason" + status);
+            var timeout = 300;
+            if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT)
+            {
+              setTimeout(function() { codeAddress(data); }, timout);
+            }
+            else
+            {
+              alert("Geocode was not successful for the following reason" + status);
+            }
           }
+          });
         }
-      });
-    }
-
-    </script>
-</div>
+      </script>
+    </div>
   </body>
 </html>

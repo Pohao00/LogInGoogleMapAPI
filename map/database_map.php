@@ -9,7 +9,6 @@
   $databaseName = "sensor_network";
   $tableName = "sensor_value";
   
-  
   //Connect to mysql database
   $con = mysql_connect($host,$user,$pass);
   mysql_query("SET NAMES 'UTF8'");
@@ -24,10 +23,8 @@
   while ($row = mysql_fetch_array($result)){
     $employee[$i]=$row;
     $i++;
-  
   }
 
-  
   //echo result as json 
     echo json_encode($employee);
 ?>
